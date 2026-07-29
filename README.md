@@ -1,2 +1,2 @@
 Games Manager Elite
-Allows for the management of a variety of game types as well as player and match tracking.
+Allows for the management and game scoring of multiple Billiard leagues. 
