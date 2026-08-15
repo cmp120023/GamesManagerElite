@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.BcaTeam>
+
+@* 
+Summary: BCA League Dashboard - Renders interactive cards for each registered team with live roster counts, along with a responsive navigation button bar to access all league features.
+*@
+
+@{
+    ViewData["Title"] = "BCA League Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <h2 class="mb-0">BCA League Dashboard</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="Standings" class="btn btn-outline-warning text-dark">🏆 Standings</a>
+            <a asp-action="Players" class="btn btn-outline-info">Players</a>
+            <a asp-action="ScoreMatch" class="btn btn-outline-primary">Log Match Score</a>
+            <a asp-action="MatchHistory" class="btn btn-outline-secondary">Match History</a>
+            <a asp-action="CreateTeam" class="btn btn-primary">+ Add New Team</a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No BCA teams found. Click "Add New Team" above to create your first team!
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var team in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="card-title text-primary">@team.TeamName</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">@team.Division</h6>
+                                <p class="card-text">
+                                    <strong>Roster Count:</strong> @(team.Roster?.Count ?? 0) players
+                                </p>
+                            </div>
+                            <a asp-action="TeamDetails" asp-route-id="@team.TeamId" class="btn btn-outline-primary btn-sm mt-3">View Team Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

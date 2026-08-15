@@ -1,0 +1,96 @@
+﻿@model Game_Manager_Elite.Models.BcaTeam
+
+@* 
+Summary: Team Details View - Displays an individual team's complete active player roster with handicap ratings alongside a calculated match log showing W/L results and scores.
+*@
+
+@{
+    ViewData["Title"] = $"{Model.TeamName} - Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>@Model.TeamName</h2>
+            <span class="badge bg-secondary">@Model.Division</span>
+        </div>
+        <div>
+            <a asp-action="AddPlayer" class="btn btn-outline-primary">+ Add Player</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Roster Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Active Roster (@Model.Roster.Count)</h5>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Roster.Any())
+                    {
+                        <p class="text-muted mb-0">No players assigned to this team yet.</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var player in Model.Roster)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@player.FirstName @player.LastName</span>
+                                    <span class="badge bg-info text-dark">Rating: @player.HandicapRating</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Match Record Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Match Log</h5>
+                </div>
+                <div class="card-body">
+                    @{
+                        var allMatches = Model.HomeMatches
+                            .Concat(Model.AwayMatches)
+                            .OrderByDescending(m => m.MatchDate)
+                            .ToList();
+                    }
+
+                    @if (!allMatches.Any())
+                    {
+                        <p class="text-muted mb-0">No matches logged for this team yet.</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var match in allMatches)
+                            {
+                                bool isHome = match.HomeTeamId == Model.TeamId;
+                                var opponent = isHome ? match.AwayTeam?.TeamName : match.HomeTeam?.TeamName;
+                                int teamScore = isHome ? match.HomeTeamScore : match.AwayTeamScore;
+                                int oppScore = isHome ? match.AwayTeamScore : match.HomeTeamScore;
+                                bool won = teamScore > oppScore;
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge @(won ? "bg-success" : "bg-danger") me-2">
+                                            @(won ? "W" : "L")
+                                        </span>
+                                        <span>vs @opponent (@(isHome ? "Home" : "Away"))</span>
+                                    </div>
+                                    <span class="fw-bold">@teamScore - @oppScore</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
