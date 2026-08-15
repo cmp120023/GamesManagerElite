@@ -7,4 +7,8 @@
     <RootNamespace>Game_Manager_Elite</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
