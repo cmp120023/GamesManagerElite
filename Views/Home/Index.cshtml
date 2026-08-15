@@ -1,8 +1,138 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model GamesManagerElite.Models.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .login-card {
+        background: #ffffff;
+        padding: 40px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .app-title {
+        text-align: center;
+        margin-bottom: 24px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .league-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .league-option {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .league-option:hover {
+            border-color: #3b82f6;
+        }
+
+    .league-logo {
+        max-width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto 10px auto;
+    }
+
+    .radio-label {
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        color: #4b5563;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+    .login-btn {
+        width: 100%;
+        background-color: #2563eb;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .login-btn:hover {
+            background-color: #1d4ed8;
+        }
+</style>
+
+<div class="login-card">
+    <h1 class="app-title">Games Manager Elite</h1>
+
+    <form method="post" action="/Account/Login">
+
+        <div class="league-selector">
+
+            <label class="league-option">
+                <img src="~/images/apa-logo.jpg" alt="APA Logo" class="league-logo" />
+                <span class="radio-label">
+                    <input type="radio" name="LeagueType" value="APA" checked /> APA League
+                </span>
+            </label>
+
+            <label class="league-option">
+                <img src="~/images/bca-logo.png" alt="BCA Logo" class="league-logo" />
+                <span class="radio-label">
+                    <input type="radio" name="LeagueType" value="BCA" /> BCA League
+                </span>
+            </label>
+
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Username or Email</label>
+            <input type="text" name="Username" class="form-input" required placeholder="Enter your username" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" name="Password" class="form-input" required placeholder="••••••••" />
+        </div>
+
+        <button type="submit" class="login-btn">Log In</button>
+    </form>
 </div>
