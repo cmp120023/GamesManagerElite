@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.BcaMatch>
+
+@* 
+Summary: Match History View - Displays a historical table of all logged fixtures sorted in descending order by date, featuring score badges and conditional winner highlighting.
+*@
+
+@{
+    ViewData["Title"] = "BCA Match History";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>BCA League Match History</h2>
+        <div>
+            <a asp-action="ScoreMatch" class="btn btn-primary">+ Log New Match</a>
+            <a asp-action="Index" class="btn btn-outline-secondary">Dashboard</a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No matches recorded yet. Click "Log New Match" to score the first game!
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Home Team</th>
+                        <th class="text-center">Score</th>
+                        <th>Away Team</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var match in Model)
+                    {
+                        <tr>
+                            <td>@match.MatchDate.ToShortDateString()</td>
+                            <td class="fw-bold @(match.HomeTeamScore > match.AwayTeamScore ? "text-success" : "")">
+                                @match.HomeTeam?.TeamName
+                            </td>
+                            <td class="text-center fs-5">
+                                <span class="badge bg-secondary">@match.HomeTeamScore - @match.AwayTeamScore</span>
+                            </td>
+                            <td class="fw-bold @(match.AwayTeamScore > match.HomeTeamScore ? "text-success" : "")">
+                                @match.AwayTeam?.TeamName
+                            </td>
+                            <td class="text-center">
+                                @if (match.IsFinalized)
+                                {
+                                    <span class="badge bg-success">Finalized</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

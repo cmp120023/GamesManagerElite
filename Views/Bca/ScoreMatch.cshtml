@@ -1,0 +1,89 @@
+﻿@model Game_Manager_Elite.Models.BcaMatch
+
+@* 
+Summary: Score Match View - Form interface for recording match scores between two distinct teams, setting the match date, and finalizing match outcomes.
+*@
+
+@{
+    ViewData["Title"] = "Log BCA Match Score";
+    var teams = ViewBag.Teams as List<Game_Manager_Elite.Models.BcaTeam> ?? new List<Game_Manager_Elite.Models.BcaTeam>();
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Log BCA Match Result</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ScoreMatch" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="MatchDate" class="form-label font-weight-bold"></label>
+                            <input asp-for="MatchDate" class="form-control" type="date" />
+                            <span asp-validation-for="MatchDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="HomeTeamId" class="form-label font-weight-bold">Home Team</label>
+                                <select asp-for="HomeTeamId" class="form-select">
+                                    <option value="">-- Select Home Team --</option>
+                                    @foreach (var team in teams)
+                                    {
+                                        <option value="@team.TeamId">@team.TeamName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="HomeTeamId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="AwayTeamId" class="form-label font-weight-bold">Away Team</label>
+                                <select asp-for="AwayTeamId" class="form-select">
+                                    <option value="">-- Select Away Team --</option>
+                                    @foreach (var team in teams)
+                                    {
+                                        <option value="@team.TeamId">@team.TeamName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="AwayTeamId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="HomeTeamScore" class="form-label font-weight-bold">Home Score (Points)</label>
+                                <input asp-for="HomeTeamScore" class="form-control" type="number" min="0" />
+                                <span asp-validation-for="HomeTeamScore" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="AwayTeamScore" class="form-label font-weight-bold">Away Score (Points)</label>
+                                <input asp-for="AwayTeamScore" class="form-control" type="number" min="0" />
+                                <span asp-validation-for="AwayTeamScore" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input asp-for="IsFinalized" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsFinalized" class="form-check-label">Finalize match and lock score</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+                            <button type="submit" class="btn btn-success">Save Match Score</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
