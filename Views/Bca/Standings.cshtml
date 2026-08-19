@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.BcaTeamStandingViewModel>
+
+@* 
+Summary: League Standings View - Displays an automated, real-time leaderboard table ranking teams by Wins and Point Differential with gold, silver, and bronze podium badges.
+*@
+
+@{
+    ViewData["Title"] = "BCA League Standings";
+    int rank = 1;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>🏆 BCA League Standings</h2>
+            <p class="text-muted mb-0">Ranked by Wins, Point Differential, and Total Points</p>
+        </div>
+        <div>
+            <a asp-action="ScoreMatch" class="btn btn-primary me-2">+ Log Match</a>
+            <a asp-action="Index" class="btn btn-outline-secondary">Dashboard</a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No teams or match data recorded yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" style="width: 70px;">Rank</th>
+                        <th>Team</th>
+                        <th>Division</th>
+                        <th class="text-center">Played</th>
+                        <th class="text-center text-success">W</th>
+                        <th class="text-center text-danger">L</th>
+                        <th class="text-center">Win %</th>
+                        <th class="text-center">PTS For</th>
+                        <th class="text-center">PTS Against</th>
+                        <th class="text-center">Diff</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var team in Model)
+                    {
+                        <tr>
+                            <td class="text-center fw-bold">
+                                @if (rank == 1)
+                                {
+                                    <span class="badge bg-warning text-dark fs-6">🥇 1</span>
+                                }
+                                else if (rank == 2)
+                                {
+                                    <span class="badge bg-secondary fs-6">🥈 2</span>
+                                }
+                                else if (rank == 3)
+                                {
+                                    <span class="badge bg-dark fs-6">🥉 3</span>
+                                }
+                                else
+                                {
+                                    <span>@rank</span>
+                                }
+                            </td>
+                            <td class="fw-bold text-primary">@team.TeamName</td>
+                            <td><span class="badge bg-light text-dark border">@team.Division</span></td>
+                            <td class="text-center">@team.MatchesPlayed</td>
+                            <td class="text-center fw-bold text-success">@team.Wins</td>
+                            <td class="text-center fw-bold text-danger">@team.Losses</td>
+                            <td class="text-center">@team.WinPercentage.ToString("0.0")%</td>
+                            <td class="text-center">@team.PointsScored</td>
+                            <td class="text-center">@team.PointsAllowed</td>
+                            <td class="text-center fw-bold @(team.PointDifferential > 0 ? "text-success" : (team.PointDifferential < 0 ? "text-danger" : ""))">
+                                @(team.PointDifferential > 0 ? $"+{team.PointDifferential}" : $"{team.PointDifferential}")
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="TeamDetails" asp-route-id="@team.TeamId" class="btn btn-sm btn-outline-primary">Details</a>
+                            </td>
+                        </tr>
+                        rank++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

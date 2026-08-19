@@ -103,7 +103,8 @@
 <div class="login-card">
     <h1 class="app-title">Games Manager Elite</h1>
 
-    <form method="post" action="/Account/Login">
+    <form asp-controller="Account" asp-action="Login" method="post">
+        @Html.AntiForgeryToken()
 
         <div class="league-selector">
 

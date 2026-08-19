@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Game_Manager_Elite.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDbContext<LeagueContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllersWithViews();
 

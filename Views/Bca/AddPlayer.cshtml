@@ -1,0 +1,70 @@
+﻿@model Game_Manager_Elite.Models.BcaPlayer
+
+@* 
+Summary: Add Player View - Provides a form to register new shooters, set handicap ratings (1-10), and assign them to an active team or free agency.
+*@
+
+@{
+    ViewData["Title"] = "Add BCA Player";
+    var teams = ViewBag.Teams as List<Game_Manager_Elite.Models.BcaTeam> ?? new List<Game_Manager_Elite.Models.BcaTeam>();
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Add New BCA Player</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddPlayer" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label font-weight-bold"></label>
+                                <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label font-weight-bold"></label>
+                                <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HandicapRating" class="form-label font-weight-bold"></label>
+                            <input asp-for="HandicapRating" class="form-control" type="number" min="1" max="10" />
+                            <small class="form-text text-muted">BCA Rating typically between 1 and 10.</small>
+                            <span asp-validation-for="HandicapRating" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="TeamId" class="form-label font-weight-bold">Assigned Team</label>
+                            <select asp-for="TeamId" class="form-select">
+                                <option value="">-- Free Agent (No Team) --</option>
+                                @foreach (var team in teams)
+                                {
+                                    <option value="@team.TeamId">@team.TeamName</option>
+                                }
+                            </select>
+                            <span asp-validation-for="TeamId" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Players" class="btn btn-secondary">View All Players</a>
+                            <button type="submit" class="btn btn-success">Save Player</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
