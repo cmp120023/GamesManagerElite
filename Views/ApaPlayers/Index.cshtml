@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.ApaPlayer>
+
+@{
+    ViewData["Title"] = "APA Player Directory";
+}
+
+<div class="container py-4">
+    <!-- Clean, Inside-Page Dashboard Nav-Header Style -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0 text-dark">APA Player Directory</h1>
+            <p class="text-muted m-0 small">Active Session Division Roster Lookup</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2 fw-semibold" style="background-color: #2563eb; border: none;">
+                <i class="bi bi-person-plus-fill"></i> Add New Player
+            </a>
+            <a asp-controller="ApaDashboard" asp-action="Index" class="btn btn-outline-secondary fw-semibold">
+                Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Player Records Data Table -->
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="background-color: #ffffff;">
+                <thead class="table-light text-secondary small text-uppercase fw-bold">
+                    <tr>
+                        <th class="ps-4">Player Name</th>
+                        <th>APA Member ID</th>
+                        <th>8-Ball SL</th>
+                        <th>9-Ball SL</th>
+                        <th>Assigned Team</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4 fw-medium">
+                                No players registered in the division database context yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold ps-4" style="color: #1e293b;">
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td class="text-secondary font-monospace small">
+                                    @Html.DisplayFor(modelItem => item.MembershipNumber)
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary px-2.5 py-1.5" style="min-width: 40px;">
+                                        SL @item.EightBallSkillLevel
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success px-2.5 py-1.5" style="min-width: 40px;">
+                                        SL @item.NineBallSkillLevel
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (item.Team != null)
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2.5 py-1.5">
+                                            @item.Team.TeamName
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <em class="text-muted small">Unassigned</em>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="text-success small fw-bold d-flex align-items-center gap-1">
+                                            <i class="bi bi-circle-fill" style="font-size: 6px;"></i> Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger small fw-bold d-flex align-items-center gap-1">
+                                            <i class="bi bi-circle-fill" style="font-size: 6px;"></i> Inactive
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group gap-1">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary px-2">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info px-2">
+                                            <i class="bi bi-eye"></i> Details
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger px-2">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

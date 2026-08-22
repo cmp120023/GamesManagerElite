@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.ApaMatch>
+
+@{
+    ViewData["Title"] = "APA Match History";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0 text-dark">APA Match History</h1>
+            <p class="text-muted m-0 small">Logged Session Team Score Sheets Ledger</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2 fw-semibold" style="background-color: #2563eb; border: none;">
+                <i class="bi bi-clipboard-plus-fill"></i> Log New Match Score
+            </a>
+            <a asp-controller="ApaDashboard" asp-action="Index" class="btn btn-outline-secondary fw-semibold">
+                Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Match History Summary Cards/Table -->
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="background-color: #ffffff;">
+                <thead class="table-light text-secondary small text-uppercase fw-bold">
+                    <tr>
+                        <th class="ps-4" style="width: 140px;">Date</th>
+                        <th style="width: 120px;">Format</th>
+                        <th class="text-end">Home Team</th>
+                        <th class="text-center" style="width: 120px;">Final Score</th>
+                        <th class="text-start">Away Team</th>
+                        <th class="text-center" style="width: 120px;">Type</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-5 fw-medium">
+                                No team match score sheets recorded in history yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- Date -->
+                                <td class="ps-4 font-monospace text-secondary small">
+                                    @item.MatchDate.ToString("yyyy-MM-dd")
+                                </td>
+
+                                <!-- Format Badge -->
+                                <td>
+                                    <span class="badge @(item.Format.ToString() == "EightBall" ? "bg-primary" : "bg-success")">
+                                        @(item.Format.ToString() == "EightBall" ? "8-Ball" : "9-Ball")
+                                    </span>
+                                </td>
+
+                                <!-- Home Team Name -->
+                                <td class="text-end fw-bold style="color: #1e293b;">
+                                    @item.HomeTeam?.TeamName
+                                </td>
+
+                                <!-- Aggregated Final Scores -->
+                                <td class="text-center font-monospace fs-5">
+                                    <span class="fw-bold @(item.HomeMatchPoints > item.AwayMatchPoints ? "text-success" : "text-muted")">@item.HomeMatchPoints</span>
+                                    <span class="text-muted mx-1">:</span>
+                                    <span class="fw-bold @(item.AwayMatchPoints > item.HomeMatchPoints ? "text-success" : "text-muted")">@item.AwayMatchPoints</span>
+                                </td>
+
+                                <!-- Away Team Name -->
+                                <td class="text-start fw-bold style="color: #1e293b;">
+                                    @item.AwayTeam?.TeamName
+                                </td>
+
+                                <!-- Match Classification -->
+                                <td class="text-center">
+                                    @if (item.IsPlayoff)
+                                    {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 small px-2">Playoff</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Regular</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

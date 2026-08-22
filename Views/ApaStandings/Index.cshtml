@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Game_Manager_Elite.Models.ApaTeamStanding>
+
+@{
+    ViewData["Title"] = "APA Division Standings";
+}
+
+<div class="container py-4">
+    <!-- Dashboard Sub-Header Navigation Block -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0 text-dark">APA Division Standings</h1>
+            <p class="text-muted m-0 small">Official Session Leaderboards & Ranking Sheets</p>
+        </div>
+        <div>
+            <a asp-controller="ApaDashboard" asp-action="Index" class="btn btn-outline-secondary fw-semibold">
+                Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Leaderboard Standings Grid Table -->
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="background-color: #ffffff;">
+                <thead class="table-light text-secondary small text-uppercase fw-bold">
+                    <tr>
+                        <th class="text-center ps-3" style="width: 80px;">Rank</th>
+                        <th>Team Name</th>
+                        <th class="text-center">Weeks Played</th>
+                        <th class="text-center">Match W / L</th>
+                        <th class="text-center">Points Per Week</th>
+                        <th class="text-center text-primary fw-bold" style="width: 140px;">Total Points</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-5 fw-medium">
+                                <i class="bi bi-trophy d-block fs-2 text-secondary bg-opacity-10 mb-2"></i>
+                                No active standings profiles calculated for this division session yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- Highlight Rank Badges for Top 3 Positions -->
+                                <td class="text-center ps-3">
+                                    @if (item.CurrentRank == 1)
+                                    {
+                                        <span class="badge bg-warning text-dark rounded-circle p-2 fw-bold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">1</span>
+                                    }
+                                    else if (item.CurrentRank == 2)
+                                    {
+                                        <span class="badge bg-secondary text-white rounded-circle p-2 fw-bold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">2</span>
+                                    }
+                                    else if (item.CurrentRank == 3)
+                                    {
+                                        <span class="badge bg-danger bg-opacity-70 text-white rounded-circle p-2 fw-bold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold text-muted small">#@item.CurrentRank</span>
+                                    }
+                                </td>
+
+                                <!-- Team Identifier and Metadata Subtitle -->
+                                <td>
+                                    <div class="fw-bold text-slate-900">
+                                        @(item.Team != null ? item.Team.TeamName : "Unknown Team Context")
+                                    </div>
+                                    <small class="text-muted text-uppercase tracking-wider font-monospace" style="font-size: 11px;">
+                                        Div @item.DivisionNumber • @item.Session @item.Year
+                                    </small>
+                                </td>
+
+                                <!-- Weeks Played -->
+                                <td class="text-center text-secondary">
+                                    @Html.DisplayFor(modelItem => item.WeeksPlayed)
+                                </td>
+
+                                <!-- Win / Loss Ratio Summary Breakdown -->
+                                <td class="text-center font-monospace small">
+                                    <span class="text-success fw-bold">@item.MatchesWon</span>
+                                    <span class="text-muted mx-1">-</span>
+                                    <span class="text-danger">@item.MatchesLost</span>
+                                </td>
+
+                                <!-- Points Per Week (Calculated Automatically by the Model) -->
+                                <td class="text-center fw-semibold text-secondary">
+                                    @item.PointsPerWeek.ToString("F2")
+                                </td>
+
+                                <!-- Total Running Table Score -->
+                                <td class="text-center text-primary fw-bold fs-5 pe-3">
+                                    @Html.DisplayFor(modelItem => item.TotalPoints)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,167 @@
+﻿@model Game_Manager_Elite.Models.ApaMatch
+
+@{
+    ViewData["Title"] = "Log Team Match";
+}
+
+<div class="container py-4">
+    <div class="card shadow border-0 p-4 mx-auto" style="max-width: 1100px; border-radius: 12px; background: #ffffff;">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+            <div>
+                <h2 class="fw-bold m-0 text-dark">Log APA 5-Game Team Score Sheet</h2>
+                <p class="text-muted m-0 small">Select teams to populate isolated rosters. Skill levels will auto-fill instantly.</p>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to History</a>
+        </div>
+
+        <form asp-action="Create" method="post" id="scoreSheetForm">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small rounded-3"></div>
+
+            <!-- Global Match Settings Layout Row -->
+            <div class="row bg-light border p-3 rounded-3 mb-4 g-3 mx-0">
+                <div class="col-md-3">
+                    <label asp-for="MatchDate" class="form-label small fw-bold text-secondary">Match Date</label>
+                    <input asp-for="MatchDate" class="form-control" type="date" required />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Format" class="form-label small fw-bold text-secondary">Game Format</label>
+                    <select asp-for="Format" id="FormatSelector" class="form-select" asp-items="Html.GetEnumSelectList<Game_Manager_Elite.Models.GameFormat>()" required>
+                        <option value="" disabled selected>Choose layout format...</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="HomeTeamId" class="form-label small fw-bold text-primary">Home Team</label>
+                    <select asp-for="HomeTeamId" id="HomeTeamSelector" class="form-select border-primary border-opacity-50" asp-items="ViewBag.HomeTeamId" required>
+                        <option value="" disabled selected>Choose Home...</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="AwayTeamId" class="form-label small fw-bold text-success">Away Team</label>
+                    <select asp-for="AwayTeamId" id="AwayTeamSelector" class="form-select border-success border-opacity-50" asp-items="ViewBag.AwayTeamId" required>
+                        <option value="" disabled selected>Choose Away...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- The 5 Individual Matchups Sheet Matrix Grid -->
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered align-middle text-center small shadow-sm" id="gamesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th class="bg-primary bg-opacity-25 text-dark border-bottom-0">Home Player (Roster Isolated)</th>
+                            <th style="width: 80px;" class="bg-primary bg-opacity-10 text-dark">SL</th>
+                            <th style="width: 100px;" class="bg-primary bg-opacity-10 text-dark">Points</th>
+                            <th style="width: 80px;" class="bg-primary bg-opacity-10 text-dark">Def. Shots</th>
+                            <th class="bg-success bg-opacity-25 text-dark border-bottom-0">Away Player (Roster Isolated)</th>
+                            <th style="width: 80px;" class="bg-success bg-opacity-10 text-dark">SL</th>
+                            <th style="width: 100px;" class="bg-success bg-opacity-10 text-dark">Points</th>
+                            <th style="width: 80px;" class="bg-success bg-opacity-10 text-dark">Def. Shots</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <tr>
+                                <td class="fw-bold bg-light">
+                                    @(i + 1)
+                                    <input type="hidden" name="games[@i].GameNumber" value="@(i + 1)" />
+                                </td>
+                                <!-- Home Player Select -->
+                                <td>
+                                    <select name="games[@i].HomePlayerId" class="form-select form-select-sm home-player-dropdown" data-index="@i" disabled required>
+                                        <option value="">-- Choose Team First --</option>
+                                    </select>
+                                </td>
+                                <!-- Home Skill Level -->
+                                <td>
+                                    <input type="number" name="games[@i].HomeSkillLevel" class="form-control form-control-sm text-center home-sl-field shadow-none" readonly tabindex="-1" />
+                                </td>
+                                <td>
+                                    <input type="number" name="games[@i].HomePointsEarned" class="form-control form-control-sm text-center fw-bold" placeholder="0" min="0" max="20" required />
+                                </td>
+                                <td>
+                                    <input type="number" name="games[@i].HomeDefensiveShots" class="form-control form-control-sm text-center" placeholder="0" min="0" required />
+                                </td>
+
+                                <!-- Away Player Select -->
+                                <td>
+                                    <select name="games[@i].AwayPlayerId" class="form-select form-select-sm away-player-dropdown" data-index="@i" disabled required>
+                                        <option value="">-- Choose Team First --</option>
+                                    </select>
+                                </td>
+                                <!-- Away Skill Level -->
+                                <td>
+                                    <input type="number" name="games[@i].AwaySkillLevel" class="form-control form-control-sm text-center away-sl-field shadow-none" readonly tabindex="-1" />
+                                </td>
+                                <td>
+                                    <input type="number" name="games[@i].AwayPointsEarned" class="form-control form-control-sm text-center fw-bold" placeholder="0" min="0" max="20" required />
+                                </td>
+                                <td>
+                                    <input type="number" name="games[@i].AwayDefensiveShots" class="form-control form-control-sm text-center" placeholder="0" min="0" required />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold" style="background-color: #2563eb; border: none;">Commit Complete Score Sheet</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        let rosters = { home: [], away: [] };
+
+        async function fetchRoster(teamId, type) {
+            const format = document.getElementById("FormatSelector").value;
+            if (!teamId || !format) return;
+
+            try {
+                const response = await fetch(`/ApaMatches/GetRosterAndSkills?teamId=${teamId}&format=${format}`);
+                const data = await response.json();
+                rosters[type] = data;
+
+                const dropdowns = document.querySelectorAll(`.${type}-player-dropdown`);
+                dropdowns.forEach(select => {
+                    select.innerHTML = '<option value="">-- Select Player --</option>';
+                    data.forEach(p => {
+                        select.innerHTML += `<option value="${p.id}">${p.fullName}</option>`;
+                    });
+                    select.disabled = false;
+                });
+            } catch (err) {
+                console.error("Failed to load roster components:", err);
+            }
+        }
+
+        document.getElementById("HomeTeamSelector").addEventListener("change", (e) => fetchRoster(e.target.value, 'home'));
+        document.getElementById("AwayTeamSelector").addEventListener("change", (e) => fetchRoster(e.target.value, 'away'));
+        document.getElementById("FormatSelector").addEventListener("change", () => {
+            fetchRoster(document.getElementById("HomeTeamSelector").value, 'home');
+            fetchRoster(document.getElementById("AwayTeamSelector").value, 'away');
+        });
+
+        document.addEventListener("change", function(e) {
+            if (e.target.classList.contains("home-player-dropdown")) {
+                const idx = e.target.getAttribute("data-index");
+                const matchedPlayer = rosters.home.find(p => p.id == e.target.value);
+                const slField = document.getElementsByName(`games[${idx}].HomeSkillLevel`)[0];
+                if (slField) slField.value = matchedPlayer ? matchedPlayer.skillLevel : "";
+            }
+            if (e.target.classList.contains("away-player-dropdown")) {
+                const idx = e.target.getAttribute("data-index");
+                const matchedPlayer = rosters.away.find(p => p.id == e.target.value);
+                const slField = document.getElementsByName(`games[${idx}].AwaySkillLevel`)[0];
+                if (slField) slField.value = matchedPlayer ? matchedPlayer.skillLevel : "";
+            }
+        });
+    </script>
+}

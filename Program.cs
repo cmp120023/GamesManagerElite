@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LeagueContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<ApaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ApaConnection")));
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

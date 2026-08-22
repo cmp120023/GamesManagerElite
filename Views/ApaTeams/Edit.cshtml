@@ -1,0 +1,77 @@
+@model Game_Manager_Elite.Models.ApaTeam
+
+@{
+    ViewData["Title"] = "Edit ApaTeam";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 max-width-md mx-auto" style="max-width: 600px; background: #ffffff; border-radius: 12px; padding: 30px;">
+        <h2 class="fw-bold mb-1" style="color: #111827;">Edit Team Details</h2>
+        <p class="text-muted mb-4">Modify the fields below to update this APA league team's record.</p>
+
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Hidden primary key token required for EF Core matching updates -->
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Team Name -->
+            <div class="form-group mb-3">
+                <label asp-for="TeamName" class="form-label fw-semibold text-secondary small mb-1">Team Name</label>
+                <input asp-for="TeamName" class="form-control py-2" required />
+                <span asp-validation-for="TeamName" class="text-danger small"></span>
+            </div>
+
+            <!-- Game Format Dropdown Select -->
+            <div class="form-group mb-3">
+                <label asp-for="Format" class="form-label fw-semibold text-secondary small mb-1">Game Format</label>
+                <select asp-for="Format" class="form-select py-2" asp-items="Html.GetEnumSelectList<Game_Manager_Elite.Models.GameFormat>()" required></select>
+                <span asp-validation-for="Format" class="text-danger small"></span>
+            </div>
+
+            <!-- Division Name / Number -->
+            <div class="form-group mb-3">
+                <label asp-for="DivisionNumber" class="form-label fw-semibold text-secondary small mb-1">Division Name / Number</label>
+                <input asp-for="DivisionNumber" class="form-control py-2" required />
+                <span asp-validation-for="DivisionNumber" class="text-danger small"></span>
+            </div>
+
+            <!-- Host Location -->
+            <div class="form-group mb-3">
+                <label asp-for="HostLocation" class="form-label fw-semibold text-secondary small mb-1">Host Location</label>
+                <input asp-for="HostLocation" class="form-control py-2" required />
+                <span asp-validation-for="HostLocation" class="text-danger small"></span>
+            </div>
+
+            <!-- Session Dropdown Select -->
+            <div class="form-group mb-3">
+                <label asp-for="Session" class="form-label fw-semibold text-secondary small mb-1">Session</label>
+                <select asp-for="Session" class="form-select py-2" asp-items="Html.GetEnumSelectList<Game_Manager_Elite.Models.ApaSession>()" required></select>
+                <span asp-validation-for="Session" class="text-danger small"></span>
+            </div>
+
+            <!-- Year -->
+            <div class="form-group mb-4">
+                <label asp-for="Year" class="form-label fw-semibold text-secondary small mb-1">Year</label>
+                <input asp-for="Year" class="form-control py-2" type="number" required />
+                <span asp-validation-for="Year" class="text-danger small"></span>
+            </div>
+
+            <!-- Action Form Submission Buttons -->
+            <div class="d-flex align-items-center gap-3 pt-2">
+                <button type="submit" class="btn btn-primary px-4 fw-semibold" style="background-color: #2563eb; border: none; padding: 10px 20px;">
+                    Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 fw-semibold" style="padding: 10px 20px;">
+                    Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

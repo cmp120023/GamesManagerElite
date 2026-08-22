@@ -2,6 +2,7 @@ html {
   font-size: 14px;
 }
 
+/*responsive design condition, for tablets/phones etc. for 768 pixels or wider*/
 @media (min-width: 768px) {
   html {
     font-size: 16px;

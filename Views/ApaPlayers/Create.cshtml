@@ -1,0 +1,103 @@
+﻿@model Game_Manager_Elite.Models.ApaPlayer
+
+@{
+    ViewData["Title"] = "Add New APA Player";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 max-width-md mx-auto" style="max-width: 600px; background: #ffffff; border-radius: 12px; padding: 30px;">
+        <h2 class="fw-bold mb-1" style="color: #111827;">Add New Player</h2>
+        <p class="text-muted mb-4">Enter player information below to register them into the active division.</p>
+
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- First Name and Last Name Grid Row Row -->
+            <div class="row">
+                <div class="col-md-6 form-group mb-3">
+                    <label asp-for="FirstName" class="form-label fw-semibold text-secondary small mb-1">First Name</label>
+                    <input asp-for="FirstName" class="form-control py-2" placeholder="e.g., Jeanette" required />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label asp-for="LastName" class="form-label fw-semibold text-secondary small mb-1">Last Name</label>
+                    <input asp-for="LastName" class="form-control py-2" placeholder="e.g., Lee" required />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Membership ID -->
+            <div class="form-group mb-3">
+                <label asp-for="MembershipNumber" class="form-label fw-semibold text-secondary small mb-1">APA Member ID (8 Digits)</label>
+                <input asp-for="MembershipNumber" class="form-control py-2" placeholder="e.g., 95741236" maxlength="8" required />
+                <span asp-validation-for="MembershipNumber" class="text-danger small"></span>
+            </div>
+
+            <!-- Skill Levels Selection Row -->
+            <div class="row">
+                <!-- 8-Ball SL Select -->
+                <div class="col-md-6 form-group mb-3">
+                    <label asp-for="EightBallSkillLevel" class="form-label fw-semibold text-secondary small mb-1">8-Ball Skill Level</label>
+                    <select asp-for="EightBallSkillLevel" class="form-select py-2" required>
+                        <option value="2">SL 2</option>
+                        <option value="3" selected>SL 3 (Default)</option>
+                        <option value="4">SL 4</option>
+                        <option value="5">SL 5</option>
+                        <option value="6">SL 6</option>
+                        <option value="7">SL 7</option>
+                    </select>
+                    <span asp-validation-for="EightBallSkillLevel" class="text-danger small"></span>
+                </div>
+
+                <!-- 9-Ball SL Select -->
+                <div class="col-md-6 form-group mb-3">
+                    <label asp-for="NineBallSkillLevel" class="form-label fw-semibold text-secondary small mb-1">9-Ball Skill Level</label>
+                    <select asp-for="NineBallSkillLevel" class="form-select py-2" required>
+                        <option value="1">SL 1</option>
+                        <option value="2">SL 2</option>
+                        <option value="3" selected>SL 3 (Default)</option>
+                        <option value="4">SL 4</option>
+                        <option value="5">SL 5</option>
+                        <option value="6">SL 6</option>
+                        <option value="7">SL 7</option>
+                        <option value="8">SL 8</option>
+                        <option value="9">SL 9</option>
+                    </select>
+                    <span asp-validation-for="NineBallSkillLevel" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Assigned Team Dropdown Dropdown Menu -->
+            <div class="form-group mb-3">
+                <label class="form-label fw-semibold text-secondary small mb-1">Assign to Active Team</label>
+                <select asp-for="ApaTeamId" class="form-select py-2" asp-items="ViewBag.ApaTeamId">
+                    <option value="">-- Leave Unassigned (Free Agent) --</option>
+                </select>
+                <span asp-validation-for="ApaTeamId" class="text-danger small"></span>
+            </div>
+
+
+            <!-- Active Status Checklist Box -->
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" asp-for="IsActive" checked />
+                <label class="form-check-label fw-medium text-dark small" asp-for="IsActive">Membership Active & Paid</label>
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="d-flex align-items-center gap-3 pt-2">
+                <button type="submit" class="btn btn-primary px-4 fw-semibold" style="background-color: #2563eb; border: none; padding: 10px 20px;">
+                    Register Player
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 fw-semibold" style="padding: 10px 20px;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

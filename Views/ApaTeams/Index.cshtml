@@ -1,0 +1,84 @@
+@model IEnumerable<Game_Manager_Elite.Models.ApaTeam>
+
+@{
+    ViewData["Title"] = "APA Teams";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0 text-dark">APA Teams</h1>
+            <p class="text-muted m-0">Active Team Roster Management Workspace</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-controller="ApaDashboard" asp-action="Index" class="btn btn-outline-secondary fw-semibold d-flex align-items-center gap-2">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2 fw-semibold" style="background-color: #2563eb; border: none;">
+                <i class="bi bi-plus-circle-fill"></i> Create New Team
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="background-color: #ffffff;">
+                <thead class="table-light text-secondary small text-uppercase fw-bold">
+                    <tr>
+                        <th class="ps-4">Team Name</th>
+                        <th>Format</th>
+                        <th>Division</th>
+                        <th>Host Location</th>
+                        <th>Session</th>
+                        <th>Year</th>
+                        <th>Total Points</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold ps-4" style="color: #1e293b;">
+                                @Html.DisplayFor(modelItem => item.TeamName)
+                            </td>
+                            <td>
+                                <span class="badge @(item.Format.ToString() == "EightBall" ? "bg-primary" : "bg-success")">
+                                    @(item.Format.ToString() == "EightBall" ? "8-Ball" : "9-Ball")
+                                </span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DivisionNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HostLocation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Session)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Year)
+                            </td>
+                            <td class="fw-bold text-secondary">
+                                @Html.DisplayFor(modelItem => item.TotalPoints)
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group gap-1">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary px-2">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info px-2">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger px-2">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

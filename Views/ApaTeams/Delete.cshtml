@@ -1,0 +1,47 @@
+@model Game_Manager_Elite.Models.ApaTeam
+
+@{
+    ViewData["Title"] = "Delete Team";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 max-width-md mx-auto" style="max-width: 600px; background: #ffffff; border-radius: 12px; padding: 30px;">
+
+        <!-- Red Zone Warning Block Title Header -->
+        <div class="text-center mb-4">
+            <div class="text-danger mb-2">
+                <i class="bi bi-exclamation-triangle-fill fs-1"></i>
+            </div>
+            <h2 class="fw-bold m-0 text-danger">Remove Team?</h2>
+            <p class="text-muted small px-3 mt-1">Warning: This action will permanently drop this record context framework configuration from your SQL database.</p>
+        </div>
+
+        <div class="border-top border-bottom py-3 my-3 bg-light rounded px-3">
+            <dl class="row mb-0 g-2 small">
+                <dt class="col-sm-4 text-secondary text-uppercase fw-bold">Team Name:</dt>
+                <dd class="col-sm-8 fw-bold text-dark">@Html.DisplayFor(model => model.TeamName)</dd>
+
+                <dt class="col-sm-4 text-secondary text-uppercase fw-bold">Format:</dt>
+                <dd class="col-sm-8 text-dark">@(Model.Format.ToString() == "EightBall" ? "8-Ball" : "9-Ball")</dd>
+
+                <dt class="col-sm-4 text-secondary text-uppercase fw-bold">Division:</dt>
+                <dd class="col-sm-8 text-dark">@Html.DisplayFor(model => model.DivisionNumber)</dd>
+            </dl>
+        </div>
+
+        <!-- Form post verification buttons -->
+        <form asp-action="Delete" method="post">
+            <!-- Hidden primary key token required for deletion confirmation matching -->
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex align-items-center justify-content-center gap-3 pt-2">
+                <button type="submit" class="btn btn-danger px-4 fw-semibold" style="padding: 10px 24px;">
+                    Confirm Permanent Delete
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 fw-semibold" style="padding: 10px 24px;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
